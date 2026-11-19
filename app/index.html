@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon Coast Cover Studio</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">NC</span>
+    <div>
+      <h1>Neon Coast Cover Studio</h1>
+      <p>Turn any photo into a GTA-style poster cover. Photos never leave this machine.</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="undoBtn" type="button" title="Undo (Ctrl+Z)">Undo</button>
+    <button id="redoBtn" type="button" title="Redo (Ctrl+Shift+Z)">Redo</button>
+    <button id="shuffleBtn" type="button" title="Random layout, grade and title">Shuffle</button>
+  </div>
+</header>
+
+<main class="workspace">
+  <aside class="panel" aria-label="Cover controls">
+    <section class="group" id="photosGroup">
+      <h2>1 · Photos</h2>
+      <p class="hint">Add up to 4 photos. Click a thumbnail to put it in the selected panel.</p>
+      <div class="thumbs" id="thumbs"></div>
+      <label class="upload">Add photos
+        <input id="photoInput" type="file" accept="image/*" multiple hidden>
+      </label>
+      <div class="row">
+        <button id="sampleBtn" type="button">Load sample photos</button>
+        <button id="clearPhotosBtn" type="button">Clear</button>
+      </div>
+    </section>
+
+    <section class="group" id="layoutGroup">
+      <h2>2 · Layout</h2>
+      <div class="choices" id="layoutChoices"></div>
+    </section>
+
+    <section class="group" id="gradeGroup">
+      <h2>3 · Grade</h2>
+      <div class="choices" id="gradeChoices"></div>
+    </section>
+
+    <section class="group" id="captionGroup">
+      <h2>4 · Caption</h2>
+      <label>Title
+        <input id="titleInput" type="text" maxlength="28" value="Neon Shore" autocomplete="off">
+      </label>
+      <label>Subtitle
+        <input id="subtitleInput" type="text" maxlength="40" value="a Vice City story" autocomplete="off">
+      </label>
+      <div class="row">
+        <label class="grow">Title colour
+          <span class="swatches" id="titleColors"></span>
+        </label>
+        <label>Title at
+          <select id="titlePos">
+            <option value="bottom">Bottom</option>
+            <option value="top">Top</option>
+          </select>
+        </label>
+      </div>
+      <label class="check"><input id="halftoneChk" type="checkbox" checked> Halftone title block</label>
+      <label class="check"><input id="badgeChk" type="checkbox" checked> Star badge ribbon</label>
+      <label class="check"><input id="grainChk" type="checkbox" checked> Film grain</label>
+      <label class="check"><input id="vignetteChk" type="checkbox" checked> Vignette</label>
+      <label>Stars
+        <input id="starsInput" type="range" min="1" max="5" step="1" value="4">
+      </label>
+    </section>
+
+    <section class="group" id="panelGroup">
+      <h2>5 · Selected panel</h2>
+      <p class="hint" id="panelHint">Click a panel on the cover to crop and position its photo.</p>
+      <div id="panelControls" hidden>
+        <label>Photo
+          <select id="panelPhoto"></select>
+        </label>
+        <label>Zoom <span id="zoomVal"></span>
+          <input id="zoomInput" type="range" min="1" max="3" step="0.05" value="1">
+        </label>
+        <label>Shift left / right
+          <input id="panXInput" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+        </label>
+        <label>Shift up / down
+          <input id="panYInput" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+        </label>
+        <div class="row">
+          <button id="fitBtn" type="button">Fit photo</button>
+          <button id="fillBtn" type="button">Fill panel</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="group" id="exportGroup">
+      <h2>6 · Export</h2>
+      <p class="hint">One tap, ready to post. PNG, no watermark.</p>
+      <label>Size
+        <select id="sizeSelect">
+          <option value="1080x1080">Square · 1080 × 1080</option>
+          <option value="1080x1350">Story · 1080 × 1350</option>
+          <option value="1920x1080">Wide · 1920 × 1080</option>
+        </select>
+      </label>
+      <button id="exportBtn" type="button" class="primary">Export PNG</button>
+      <button id="exportAllBtn" type="button">Export all three sizes</button>
+      <p id="status" role="status"></p>
+    </section>
+  </aside>
+
+  <section class="stage">
+    <div class="canvas-wrap">
+      <canvas id="cover" width="1080" height="1080" aria-label="Cover preview"></canvas>
+      <div class="stage-tag" id="stageTag">1080 × 1080 · Square</div>
+    </div>
+    <p class="stage-hint">Click a panel to select it · drag to move its photo · scroll to zoom · Ctrl+Z to undo</p>
+  </section>
+</main>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
