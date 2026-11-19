@@ -58,8 +58,20 @@ function drawPhotoInto(ctx, photo, dx, dy, dw, dh, crop, grade) {
   const scale = base * (crop.zoom || 1);
   const pw = iw * scale;
   const ph = ih * scale;
+  // Default framing: faces sit in the upper part of a portrait photo, so
+  // when the panel crops vertically, anchor the visible band on that
+  // region (fraction FOCUS_Y of the photo height) instead of the vertical
+  // middle — a wide panel otherwise beheads its subject. An explicit pan
+  // (crop.oy) moves away from the anchor, so dragging stays continuous
+  // and "Fit" (oy 0) returns to the anchored framing. The anchor is
+  // clamped to the legal range, so it never leaves a gap.
+  const FOCUS_Y = 0.20;
+  let oy = (dh - ph) / 2;
+  if (ph > dh) {
+    oy = Math.max(dh - ph, Math.min(0, dh / 2 - FOCUS_Y * ph));
+  }
+  oy += (crop.oy || 0) * dh;
   const ox = (dw - pw) / 2 + (crop.ox || 0) * dw;
-  const oy = (dh - ph) / 2 + (crop.oy || 0) * dh;
   ctx.save();
   ctx.filter = grade.photoFilter;
   ctx.drawImage(photo, dx + ox, dy + oy, pw, ph);
