@@ -149,13 +149,12 @@ export const LAYOUTS = [
       const top = 0.78;
       const h = top - g * 2;
       // One big hero panel (the boulevard photo: near-square, so the red
-      // convertible and the face both survive the crop) plus two tall
-      // side panels. Three boxes total.
+      // convertible and the face both survive the crop) plus one tall
+      // side panel. Two boxes total.
       return {
         slots: [
-          slot('hero', g, g, 0.40, h, { photo: 0 }),
-          slot('b', 0.428, g, 0.28, h, { photo: 1 }),
-          slot('c', 0.722, g, 0.264, h, { photo: 0 }),
+          slot('hero', g, g, 0.55, h, { photo: 0 }),
+          slot('b', 0.578, g, 0.408, h, { photo: 1 }),
         ],
         title: bandedTitle(0.80, 0.17),
       };
