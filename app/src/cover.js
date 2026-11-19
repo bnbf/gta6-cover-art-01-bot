@@ -182,12 +182,16 @@ function drawTitleBlock(ctx, W, H, state, grade, title, seed) {
   }
   const text = (state.title || '').trim().toUpperCase();
   const sub = (state.subtitle || '').trim();
-  const cx = align === 'center' ? x + w / 2 : x;
+  // The badge pill sits at the top-right: when the title band is at the top
+  // too, keep the lettering out from under it.
+  const badgeW = state.badge && y < H * 0.25 ? badgeRow(ctx, W).rowW : 0;
+  const availW = badgeW > 0 ? Math.max(w * 0.3, w - badgeW - W * 0.02) : w;
+  const cx = align === 'center' ? x + availW / 2 : x;
   ctx.save();
   ctx.textAlign = align === 'center' ? 'center' : 'left';
   ctx.textBaseline = 'alphabetic';
   if (text) {
-    const size = fitFont(ctx, text, w, h * 0.52, family);
+    const size = fitFont(ctx, text, availW, h * 0.52, family);
     ctx.font = `900 ${size}px ${family}`;
     try { ctx.letterSpacing = `${Math.round(size * 0.02)}px`; } catch { /* older canvas */ }
     ctx.lineWidth = Math.max(2, size * 0.09);
@@ -209,20 +213,30 @@ function drawTitleBlock(ctx, W, H, state, grade, title, seed) {
   ctx.restore();
 }
 
+/** Measures the badge pill (stars + "NEON COAST") so the title block can
+ *  keep its lettering out from under it. */
+function badgeRow(ctx, W) {
+  const family = '"Coast Condensed", "Arial Narrow", sans-serif';
+  const pad = Math.round(W * 0.012);
+  const starSize = Math.round(W * 0.026);
+  ctx.save();
+  ctx.font = `900 ${starSize}px ${family}`;
+  const labelW = ctx.measureText('NEON COAST').width;
+  ctx.restore();
+  const rowW = labelW + pad * 2 + (starSize + 4) * 5;
+  const rowH = starSize + pad * 1.6;
+  return { pad, starSize, labelW, rowW, rowH };
+}
+
 function drawBadge(ctx, W, H, state) {
   if (!state.badge) return;
   const stars = Math.max(1, Math.min(5, state.stars || 4));
   const family = '"Coast Condensed", "Arial Narrow", sans-serif';
-  const pad = Math.round(W * 0.012);
-  const starSize = Math.round(W * 0.026);
-  const label = 'NEON COAST';
-  ctx.save();
-  ctx.font = `900 ${starSize}px ${family}`;
-  const labelW = ctx.measureText(label).width;
-  const rowW = labelW + pad * 2 + (starSize + 4) * 5;
-  const rowH = starSize + pad * 1.6;
+  const { pad, starSize, rowW, rowH } = badgeRow(ctx, W);
   const bx = W - rowW - pad;
   const by = pad;
+  ctx.save();
+  ctx.font = `900 ${starSize}px ${family}`;
   ctx.fillStyle = 'rgba(10, 6, 18, 0.85)';
   ctx.beginPath();
   ctx.roundRect(bx, by, rowW, rowH, rowH / 2);
@@ -240,7 +254,7 @@ function drawBadge(ctx, W, H, state) {
   ctx.globalAlpha = 1;
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'left';
-  ctx.fillText(label, bx + pad + (starSize + 4) * 5, by + rowH / 2 + 1);
+  ctx.fillText('NEON COAST', bx + pad + (starSize + 4) * 5, by + rowH / 2 + 1);
   ctx.restore();
 }
 

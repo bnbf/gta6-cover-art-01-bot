@@ -63,6 +63,16 @@ function render(px) {
     canvas.height = size.h;
   }
   drawCover(canvas, state, images(), { select: selectedSlot });
+  // Size the preview element to fit the viewport; the exported PNG always
+  // uses the full pixel size, so this never changes what is saved. In cover
+  // mode the shot window IS the cover size, so show it 1:1 (headless
+  // innerHeight runs smaller than the window and would letterbox it).
+  const coverMode = document.body.classList.contains('shot-cover');
+  const availW = canvas.parentElement.clientWidth || window.innerWidth;
+  const availH = coverMode ? size.h : window.innerHeight - 170;
+  const scale = Math.min(availW / size.w, availH / size.h, 1);
+  canvas.style.width = `${Math.max(1, Math.round(size.w * scale))}px`;
+  canvas.style.height = `${Math.max(1, Math.round(size.h * scale))}px`;
   $('stageTag').textContent = `${size.w} × ${size.h} · ${size.label}`;
   $('undoBtn').disabled = !history.canUndo();
   $('redoBtn').disabled = !history.canRedo();
@@ -189,7 +199,6 @@ function applyPreset(preset) {
 function syncCaption() {
   $('titleInput').value = state.title;
   $('subtitleInput').value = state.subtitle;
-  $('titlePos').value = state.titlePos;
   $('halftoneChk').checked = state.halftone;
   $('badgeChk').checked = state.badge;
   $('grainChk').checked = state.grain;
@@ -397,7 +406,6 @@ function bindControls() {
   $('titleInput').addEventListener('change', () => commit());
   $('subtitleInput').addEventListener('input', (e) => { state = { ...state, subtitle: e.target.value }; render(); });
   $('subtitleInput').addEventListener('change', () => commit());
-  $('titlePos').addEventListener('change', (e) => { state = { ...state, titlePos: e.target.value }; commit(); });
   $('halftoneChk').addEventListener('change', (e) => { state = { ...state, halftone: e.target.checked }; commit(); });
   $('badgeChk').addEventListener('change', (e) => { state = { ...state, badge: e.target.checked }; commit(); });
   $('grainChk').addEventListener('change', (e) => { state = { ...state, grain: e.target.checked }; commit(); });

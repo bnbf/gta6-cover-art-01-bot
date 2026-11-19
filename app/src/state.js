@@ -35,7 +35,6 @@ export function defaultState() {
     title: 'Neon Shore',
     subtitle: 'a Vice City story',
     titleColor: '#ffffff',
-    titlePos: 'bottom',
     halftone: true,
     badge: true,
     grain: true,
