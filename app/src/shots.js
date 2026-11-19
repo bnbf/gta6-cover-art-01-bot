@@ -12,7 +12,7 @@ function param(query, key, fallback) {
 }
 
 export async function runShot(shot, query, api) {
-  const layout = param(query, 'layout', 'nine');
+  const layout = param(query, 'layout', 'carhero');
   const grade = param(query, 'grade', 'sunset');
   const title = param(query, 'title', 'Neon Shore');
   const subtitle = param(query, 'subtitle', 'a Vice City story');

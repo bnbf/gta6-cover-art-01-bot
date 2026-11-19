@@ -13,7 +13,7 @@ export const TITLE_COLORS = ['#ffffff', '#ffc93d', '#ff2e88', '#22e6c8', '#12081
 export const PRESETS = [
   {
     name: 'Neon Shore',
-    layout: 'nine', grade: 'sunset',
+    layout: 'carhero', grade: 'sunset',
     title: 'NEON SHORE', subtitle: 'a Vice City story', stars: 4,
   },
   {
@@ -30,7 +30,7 @@ export const PRESETS = [
 
 export function defaultState() {
   return {
-    layout: 'nine',
+    layout: 'carhero',
     grade: 'sunset',
     title: 'Neon Shore',
     subtitle: 'a Vice City story',

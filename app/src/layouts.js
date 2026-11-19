@@ -140,6 +140,27 @@ export const LAYOUTS = [
       };
     },
   },
+  {
+    id: 'carhero',
+    name: 'Car Hero',
+    blurb: 'One big ride, two faces',
+    build(W, H) {
+      const g = 0.014;
+      const top = 0.78;
+      const h = top - g * 2;
+      // One big hero panel (the boulevard photo: near-square, so the red
+      // convertible and the face both survive the crop) plus two tall
+      // side panels. Three boxes total.
+      return {
+        slots: [
+          slot('hero', g, g, 0.40, h, { photo: 0 }),
+          slot('b', 0.428, g, 0.28, h, { photo: 1 }),
+          slot('c', 0.722, g, 0.264, h, { photo: 0 }),
+        ],
+        title: bandedTitle(0.80, 0.17),
+      };
+    },
+  },
 ];
 
 export function layoutById(id) {
